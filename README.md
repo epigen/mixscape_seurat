@@ -1,2 +1,2 @@
-# mixscape_seurat
-A Snakemake workflow for performing perturbation analyses of (multimodal) sc/snRNA-seq data powered by the R package Seurat's method Mixscape.
+# scCRISPR-seq Perturbation Analysis Snakemake Workflow powered by Seurat's Mixscape
+A Snakemake workflow for performing perturbation analyses of (multimodal) CRISPRS screens with sc/snRNA-seq read-out powered by the R package Seurat's method Mixscape.
