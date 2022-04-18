@@ -17,7 +17,7 @@ project_name: AKsmall
 grna_split_symbol: "-"
 
 # which assay to use (eg "SCT" or "RNA"), if scale.data is empty standard Seurat methods are applied: NormalizeData(object = data) %>% FindVariableFeatures() %>% ScaleData()
-assay: "RNA"
+assay: "SCT"
 
 # perform analysis using only variable features (yes=1, no=0)
 variable_features_only: 0
