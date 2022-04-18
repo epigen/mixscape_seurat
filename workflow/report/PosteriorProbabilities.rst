@@ -1,0 +1,1 @@
+Posterior probability values in non perturbed and perturbed cells of sample {{snakemake.wildcards["sample"]}}.

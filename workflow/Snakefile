@@ -1,0 +1,50 @@
+##### libraries #####
+import os
+import sys
+import pandas as pd
+import yaml
+from snakemake.utils import min_version
+
+min_version("6.0.3")
+
+SDIR = os.path.realpath(os.path.dirname(srcdir("Snakefile")))
+shell.prefix(f"set -eo pipefail;")
+
+##### container image #####
+# containerized: "docker://sreichl/..."
+
+##### setup report #####
+report: os.path.join("report", "workflow.rst")
+
+##### load config and sample annotation sheets #####
+configfile: os.path.join("config", "config.yaml")
+
+annot = pd.read_csv(config['annotation'], index_col='name')
+samples = list(annot.index)
+
+result_path = os.path.join(config["result_path"],'mixscape_seurat')
+
+rule all:
+    input:
+        mixscape_lda_objects = expand(os.path.join(result_path,'{sample}','MIXSCAPE_FILTERED_LDA_object.rds'), 
+                               sample=samples),
+        prtb_score_plot = expand(os.path.join(result_path,'{sample}','plots','MIXSCAPE_ALL_PerturbScores_{split_by}.png'),
+                                 sample=samples,
+                                 split_by=['',config["CalcPerturbSig"]["split_by_col"], config["RunMixscape"]["split_by_col"]]),
+        envs = expand(os.path.join(config["result_path"],'envs','mixscape_seurat','{env}.yaml'),env=['seurat']),
+        configs = os.path.join(config["result_path"],'configs','mixscape_seurat','{}_config.yaml'.format(config["project_name"])),
+        annotations = config["annotation"],
+    resources:
+        mem_mb=config.get("mem", "16000"),
+    threads: config.get("threads", 1)
+    log:
+        os.path.join("logs","rules","all.log"),
+    params:
+        partition=config.get("partition"),
+
+        
+##### load rules #####
+include: os.path.join("rules", "common.smk")
+include: os.path.join("rules", "mixscape.smk")
+include: os.path.join("rules", "visualize.smk")
+include: os.path.join("rules", "envs_export.smk")
