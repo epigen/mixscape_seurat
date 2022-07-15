@@ -29,7 +29,7 @@ CalcPerturbSig:
     nt_term: "NonTargeting"
     n_neighbors: 30
     ndims: 40
-    split_by_col: "batch"
+    split_by_col: ""
 
 # parameters for https://satijalab.org/seurat/reference/runmixscape
 RunMixscape:
