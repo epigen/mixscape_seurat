@@ -2,8 +2,10 @@
 library(Seurat)
 library(ggplot2)
 library(patchwork)
+
 # source utility functions
-source("workflow/scripts/utils.R")
+# source("workflow/scripts/utils.R")
+snakemake@source("./utils.R")
 
 # inputs
 mixscape_object_path <- snakemake@input[["mixscape_object"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/mixscape_seurat/condition_24h_cytokines/MIXSCAPE_ALL_object.rds" 

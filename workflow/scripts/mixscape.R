@@ -1,8 +1,10 @@
 #### load libraries & utility function 
 library(Seurat)
 library(ggplot2)
+
 # source utility functions
-source("workflow/scripts/utils.R")
+# source("workflow/scripts/utils.R")
+snakemake@source("./utils.R")
 
 # inputs
 filtered_object_path <- snakemake@input[[1]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/scrnaseq_processing_seurat/condition_24h_cytokines/FILTERED_object.rds"
