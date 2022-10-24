@@ -33,7 +33,7 @@ rule all:
                                  split_by=['',config["CalcPerturbSig"]["split_by_col"], config["RunMixscape"]["split_by_col"]]),
         envs = expand(os.path.join(config["result_path"],'envs','mixscape_seurat','{env}.yaml'),env=['seurat']),
         configs = os.path.join(config["result_path"],'configs','mixscape_seurat','{}_config.yaml'.format(config["project_name"])),
-        annotations = config["annotation"],
+        annotations = os.path.join(config["result_path"],'configs','mixscape_seurat','{}_annot.csv'.format(config["project_name"])),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
