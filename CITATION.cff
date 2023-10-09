@@ -1,0 +1,34 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  scCRISPR-seq Perturbation Analysis Workflow using Seurat's
+  Mixscape
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Stephan
+    family-names: Reichl
+    orcid: 'https://orcid.org/0000-0001-8555-7198'
+    affiliation: CeMM Research Center for Molecular Medicine
+  - given-names: Christoph
+    family-names: Bock
+    orcid: 'https://orcid.org/0000-0001-6091-3088'
+    affiliation: CeMM Research Center for Molecular Medicine
+repository-code: 'https://github.com/epigen/mixscape_seurat'
+url: 'https://epigen.github.io/mixscape_seurat/'
+abstract: >-
+  A Snakemake workflow for performing perturbation analyses
+  of pooled (multimodal) CRISPR screens with sc/snRNA-seq
+  read-out (scCRISPR-seq) using the R package Seurat's
+  method Mixscape.
+keywords:
+  - scCRISPR-seq
+  - Perturbation Analysis
+  - Bioinformatics
+  - Workflow
+  - Snakemake
+license: MIT

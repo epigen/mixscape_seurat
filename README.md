@@ -1,6 +1,8 @@
 # scCRISPR-seq Perturbation Analysis Snakemake Workflow powered by Seurat's Mixscape
 A [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow for performing perturbation analyses of pooled (multimodal) CRISPR screens with sc/snRNA-seq read-out (scCRISPR-seq) powered by the R package [Seurat's](https://satijalab.org/seurat/index.html) method [Mixscape](https://satijalab.org/seurat/articles/mixscape_vignette.html).
 
+This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details and modules check out the project's repository.
+
 **If you use this workflow in a publication, don't forget to give credits to the authors by citing the URL of this (original) repository (and its DOI, see Zenodo badge above -> coming soon).**
 
 ![Workflow Rulegraph](./workflow/dags/rulegraph.svg)
@@ -15,9 +17,11 @@ Table of contents
   * [Configuration](#configuration)
   * [Example](#example)
   * [Links](#links)
+  * [Publications](#publications)
 
 # Authors
 - [Stephan Reichl](https://github.com/sreichl)
+- [Christoph Bock](https://github.com/chrbock)
 
 
 # Software
@@ -25,7 +29,10 @@ This project wouldn't be possible without the following software and it's depend
 
 | Software       | Reference (DOI)                                   |
 | :------------: | :-----------------------------------------------: |
+| ggplot2        | https://ggplot2.tidyverse.org/                    |
 | Mixscape       | https://doi.org/10.1038/s41588-021-00778-2        |
+| mixtools       | https://CRAN.R-project.org/package=mixtools       |
+| patchwork      | https://CRAN.R-project.org/package=patchwork      |
 | Seurat         | https://doi.org/10.1016/j.cell.2021.04.048        |
 | Snakemake      | https://doi.org/10.12688/f1000research.29032.2    |
 
@@ -70,3 +77,7 @@ Detailed specifications can be found here [./config/README.md](./config/README.m
 - [GitHub Page](https://epigen.github.io/mixscape_seurat/)
 - [Zenodo Repository (coming soon)]()
 - [Snakemake Workflow Catalog Entry](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/mixscape_seurat)
+
+# Publications
+The following publications successfully used this module for their analyses.
+- ...
