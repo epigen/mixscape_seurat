@@ -15,7 +15,7 @@ rule visualize:
         ab_expr_plot = report(os.path.join(result_path,'{sample}','plots','MIXSCAPE_ALL_{}_expression.png'.format(config["Antibody_Capture"])),
                           caption="../report/AntibodyExpression.rst", 
                           category="{}_mixscape_seurat".format(config["project_name"]), 
-                          subcategory="{sample}") if config["Antibody_Capture"]!="" else "",
+                          subcategory="{sample}") if config["Antibody_Capture"]!="" else [],
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
