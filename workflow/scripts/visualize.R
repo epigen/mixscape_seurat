@@ -11,7 +11,7 @@ snakemake@source("./utils.R")
 mixscape_object_path <- snakemake@input[["mixscape_object"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/mixscape_seurat/condition_24h_cytokines/MIXSCAPE_ALL_object.rds" 
 
 # outputs
-post_prob_plot_path <- snakemake@output[["post_prob_plot"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/mixscape_seurat/condition_24h_cytokines/plots/MIXSCAPE_ALL_PerturbScores_.png" 
+post_prob_plot_path <- dirname(file.path(snakemake@output[["post_prob_plot"]][1])) #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/mixscape_seurat/condition_24h_cytokines/plots/MIXSCAPE_ALL_PerturbScores_.png"
 
 # parameters
 calcPerturbSig_params <- snakemake@params[["CalcPerturbSig_params"]]
@@ -81,7 +81,7 @@ for (split_by in c("default", calcPerturbSig_params[["split_by_col"]], runMixsca
 #     options(repr.plot.width=width_panel, repr.plot.height=height_panel)
 #     print(perturb_scores_panel)
     ggsave_new(filename = paste0("MIXSCAPE_ALL_PerturbScores_",split_by), 
-               results_path=dirname(post_prob_plot_path), 
+               results_path=post_prob_plot_path, 
                plot=perturb_scores_panel, 
                width=width_panel, 
                height=height_panel)
@@ -134,7 +134,7 @@ for (split_by in c("default", calcPerturbSig_params[["split_by_col"]], runMixsca
 #     options(repr.plot.width=width_panel, repr.plot.height=height_panel)
 #     print(post_probs_panel)
     ggsave_new(filename = paste0("MIXSCAPE_ALL_PosteriorProbabilities_",split_by), 
-               results_path=dirname(post_prob_plot_path), 
+               results_path=post_prob_plot_path,
                plot=post_probs_panel, 
                width=width_panel, 
                height=height_panel)
@@ -192,7 +192,7 @@ if (antibody_capture_flag != ""){
 #     options(repr.plot.width=width_panel, repr.plot.height=height_panel)
 #     print(violin_plots_panel)
     ggsave_new(filename = paste0("MIXSCAPE_ALL_",antibody_capture_flag,"_expression"), 
-               results_path=dirname(post_prob_plot_path), 
+               results_path=post_prob_plot_path,
                plot=violin_plots_panel, 
                width=width_panel, 
                height=height_panel)

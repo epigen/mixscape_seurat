@@ -4,9 +4,9 @@
 save_seurat_object <- function (seurat_obj, result_dir, prefix){
     
     # make result directory if not exist
-    if (!dir.exists(result_dir)){
-        dir.create(result_dir, recursive = TRUE)
-    }
+#     if (!dir.exists(result_dir)){
+#         dir.create(result_dir, recursive = TRUE)
+#     }
 
     # save seurat object
     saveRDS(seurat_obj, file=file.path(result_dir, paste0(prefix,"object",".rds")))
@@ -21,13 +21,17 @@ save_seurat_object <- function (seurat_obj, result_dir, prefix){
 # extended ggsave
 ggsave_new <- function(filename, results_path, plot, width=5, height=5){
     # make result directory if not exist
-    if (!dir.exists(results_path)){
-        dir.create(results_path, recursive = TRUE)
-    }
+#     if (!dir.exists(results_path)){
+#         dir.create(results_path, recursive = TRUE)
+#     }
+    
+    # failsafe for large plots
+    width <- min(100, width)
+    height <- min(100, height)
     
     for (format in c('png')){
         ggsave(
-          paste0(filename,'.',format),
+          filename = paste0(filename,'.',format),
           plot = plot,
           device = format,
           path = file.path(results_path),
