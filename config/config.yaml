@@ -5,9 +5,9 @@ threads: 1
 partition: 'shortq'
 
 ##### GENERAL #####
-annotation: /research/home/sreichl/projects/macroIC/config/AKsmall_mixscape_seurat_annotation.csv
-result_path: /nobackup/lab_bock/projects/macroIC/results/AKsmall/
-project_name: AKsmall
+annotation: /path/to/mixscape_seurat_annotation.csv
+result_path: /path/to/results/
+project_name: myCROPseq
 
 ##### MIXSCAPE #####
 
@@ -33,7 +33,7 @@ CalcPerturbSig:
 RunMixscape:
     mixscape_fine_mode: 'FALSE' 
     lfc_th: 0.1
-    split_by_col: 'condition'
+    split_by_col: ''
     min_de_genes: 5
     min_cells: 5
     prtb_type: "KO"
