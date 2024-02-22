@@ -8,25 +8,15 @@ library(patchwork)
 snakemake@source("./utils.R")
 
 # inputs
-mixscape_object_path <- snakemake@input[["mixscape_object"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/mixscape_seurat/condition_24h_cytokines/MIXSCAPE_ALL_object.rds" 
+mixscape_object_path <- snakemake@input[["mixscape_object"]]
 
 # outputs
-post_prob_plot_path <- dirname(file.path(snakemake@output[["post_prob_plot"]][1])) #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/mixscape_seurat/condition_24h_cytokines/plots/MIXSCAPE_ALL_PerturbScores_.png"
+post_prob_plot_path <- dirname(file.path(snakemake@output[["post_prob_plot"]][1]))
 
 # parameters
 calcPerturbSig_params <- snakemake@params[["CalcPerturbSig_params"]]
 runMixscape_params <- snakemake@params[["RunMixscape_params"]]
 antibody_capture_flag <- snakemake@params[["antibody_capture_flag"]]
-
-# for testing
-# calcPerturbSig_params <- list()
-# calcPerturbSig_params[["split_by_col"]] <- "batch"
-# calcPerturbSig_params[["gene_col"]] <- "KOcall"
-# calcPerturbSig_params[["nt_term"]] <- "NonTargeting"
-# runMixscape_params <- list()
-# runMixscape_params[["split_by_col"]] <- "condition"
-# runMixscape_params[["prtb_type"]] <- "KO"
-# antibody_capture_flag <- "AB"
 
 ### load mixscape data
 data <- readRDS(file = file.path(mixscape_object_path))

@@ -5,10 +5,7 @@ import pandas as pd
 import yaml
 from snakemake.utils import min_version
 
-min_version("6.0.3")
-
-SDIR = os.path.realpath(os.path.dirname(srcdir("Snakefile")))
-shell.prefix(f"set -eo pipefail;")
+min_version("7.15.2")
 
 ##### container image #####
 # containerized: "docker://sreichl/..."
@@ -31,7 +28,7 @@ rule all:
         prtb_score_plot = expand(os.path.join(result_path,'{sample}','plots','MIXSCAPE_ALL_PerturbScores_{split_by}.png'),
                                  sample=samples,
                                  split_by=['',config["CalcPerturbSig"]["split_by_col"], config["RunMixscape"]["split_by_col"]]),
-        envs = expand(os.path.join(config["result_path"],'envs','mixscape_seurat','{env}.yaml'),env=['seurat']),
+        envs = expand(os.path.join(config["result_path"],'envs','mixscape_seurat','{env}.yaml'),env=['seurat_mixscape','seurat_lda']),
         configs = os.path.join(config["result_path"],'configs','mixscape_seurat','{}_config.yaml'.format(config["project_name"])),
         annotations = os.path.join(config["result_path"],'configs','mixscape_seurat','{}_annot.csv'.format(config["project_name"])),
     resources:

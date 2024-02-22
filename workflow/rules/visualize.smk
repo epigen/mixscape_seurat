@@ -20,7 +20,7 @@ rule visualize:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/seurat.yaml"
+        "../envs/seurat_mixscape.yaml"
     log:
         os.path.join("logs","rules","visualize_{sample}.log"),
     params:

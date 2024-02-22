@@ -1,20 +1,20 @@
 #### load libraries & utility function 
-library(Seurat)
-library(ggplot2)
+library("Seurat")
+library("ggplot2")
 
 # source utility functions
 # source("workflow/scripts/utils.R")
 snakemake@source("./utils.R")
 
 # inputs
-filtered_object_path <- snakemake@input[[1]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/scrnaseq_processing_seurat/condition_24h_cytokines/FILTERED_object.rds"
+filtered_object_path <- snakemake@input[[1]]
 
 # outputs
-mixscape_object_path <- snakemake@output[["mixscape_object"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/mixscape_seurat/condition_24h_cytokines/MIXSCAPE_ALL_object.rds" 
+mixscape_object_path <- snakemake@output[["mixscape_object"]]
 mixscape_plot_path <- snakemake@output[["mixscape_plot"]] 
 
 # parameters
-assay <- snakemake@params[["assay"]] #"SCT" #"RNA"
+assay <- snakemake@params[["assay"]]
 variable_features_only <- snakemake@params[["variable_features_only"]] 
 calcPerturbSig_params <- snakemake@params[["CalcPerturbSig_params"]]
 runMixscape_params <- snakemake@params[["RunMixscape_params"]]
@@ -164,14 +164,7 @@ save_seurat_object(seurat_obj=data,
                    prefix="MIXSCAPE_ALL_")
  
 # save mixscape statistics
-write.csv(t(stat_table), file=file.path(result_dir, paste0('MIXSCAPE_ALL_stats.csv')), row.names=TRUE)
+fwrite(as.data.frame(t(stat_table)), file=file.path(result_dir, paste0('MIXSCAPE_ALL_stats.csv')), row.names=TRUE)
                            
-# save matrix of PRTB values
-slot <- "data"                           
-write.csv(GetAssayData(object = data, slot = slot, assay = "PRTB"), file=file.path(result_dir, paste0('MIXSCAPE_ALL_PRTB_',slot,'.csv')), row.names=TRUE)
-  
-                           
-# slots counts and scale.data are emtpy -> only save data slot
-# for (slot in c("counts","data","scale.data")){
-#     write.csv(GetAssayData(object = data, slot = slot, assay = "PRTB"), file=file.path(result_dir, paste0('MIXSCAPE_ALL_PRTB_',slot,'.csv')), row.names=TRUE)
-# }
+# save matrix of PRTB values; slots counts and scale.data are emtpy -> only save data slot
+fwrite(as.data.frame(GetAssayData(object = data, slot = "data", assay = "PRTB")), file=file.path(result_dir, paste0('MIXSCAPE_ALL_PRTB_',slot,'.csv')), row.names=TRUE)

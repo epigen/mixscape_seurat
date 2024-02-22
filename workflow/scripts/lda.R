@@ -1,21 +1,21 @@
 #### load libraries & utility function 
-library(Seurat)
-library(ggplot2)
-library(scales)
+library("Seurat")
+library("ggplot2")
+library("scales")
 
 # source utility functions
 # source("workflow/scripts/utils.R")
 snakemake@source("./utils.R")
 
 # inputs
-mixscape_object_path <- snakemake@input[["mixscape_object"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/mixscape_seurat/condition_24h_cytokines/MIXSCAPE_ALL_object.rds" 
+mixscape_object_path <- snakemake@input[["mixscape_object"]]
 
 # outputs
-lda_object_path <- snakemake@output[["lda_object"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/mixscape_seurat/condition_24h_cytokines/MIXSCAPE_FILTERED_LDA_object.rds" 
+lda_object_path <- snakemake@output[["lda_object"]]
 lda_plot_path <- snakemake@output[["lda_plot"]] 
 
 # parameters
-assay <- snakemake@params[["assay"]] #"SCT" #"RNA"
+assay <- snakemake@params[["assay"]]
 calcPerturbSig_params <- snakemake@params[["CalcPerturbSig_params"]]
 runMixscape_params <- snakemake@params[["RunMixscape_params"]]
 mixscapeLDA_params <- snakemake@params[["MixscapeLDA_params"]]
@@ -121,8 +121,7 @@ save_seurat_object(seurat_obj=sub,
                    prefix="MIXSCAPE_FILTERED_LDA_")
 
 # save matrix of LDA values
-write.csv(lda_data, file=file.path(result_dir, paste0('MIXSCAPE_FILTERED_LDA_data.csv')), row.names=TRUE)
+fwrite(as.data.frame(lda_data), file=file.path(result_dir, paste0('MIXSCAPE_FILTERED_LDA_data.csv')), row.names=TRUE)
                            
 # save matrix of PRTB values
-slot <- "data"                           
-write.csv(GetAssayData(object = sub, slot = slot, assay = "PRTB"), file=file.path(result_dir, paste0('MIXSCAPE_FILTERED_PRTB_',slot,'.csv')), row.names=TRUE)
+fwrite(as.data.frame(GetAssayData(object = sub, slot = "data", assay = "PRTB")), file=file.path(result_dir, paste0('MIXSCAPE_FILTERED_PRTB_',slot,'.csv')), row.names=TRUE)

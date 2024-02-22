@@ -13,9 +13,9 @@ rule mixscape:
                           subcategory="{sample}"),
     resources:
         mem_mb=config.get("mem", "16000"),
-    threads: config.get("threads", 1)
+    threads: 4*config.get("threads", 1)
     conda:
-        "../envs/seurat.yaml"
+        "../envs/seurat_mixscape.yaml"
     log:
         os.path.join("logs","rules","mixscape_{sample}.log"),
     params:
@@ -27,7 +27,7 @@ rule mixscape:
         grna_split_symbol = config["grna_split_symbol"],
     script:
         "../scripts/mixscape.R"
-      
+
 # perform LDA on perturbed subset
 rule lda:
     input:
@@ -45,7 +45,7 @@ rule lda:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/seurat.yaml"
+        "../envs/seurat_lda.yaml"
     log:
         os.path.join("logs","rules","lda_{sample}.log"),
     params:
