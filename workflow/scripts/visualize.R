@@ -20,6 +20,11 @@ calcPerturbSig_params <- snakemake@config[["CalcPerturbSig"]]
 runMixscape_params <- snakemake@config[["RunMixscape"]]
 antibody_capture_flag <- snakemake@config[["Antibody_Capture"]]
 
+# make plot directories
+dir.create(post_prob_plot_path, recursive = TRUE)
+dir.create(prtb_score_plot_path, recursive = TRUE)
+if (antibody_capture_flag != "") dir.create(ab_expr_plot_path, recursive = TRUE)
+
 ### load mixscape data
 data <- readRDS(file = file.path(mixscape_object_path))
 Idents(data) <- "mixscape_class"
@@ -27,10 +32,8 @@ Idents(data) <- "mixscape_class"
 ### Visualize Mixscape analysis results
 
 # plot specifications
-# n_col <- 5
 width <- 5
 height <- 3
-# width_panel <- n_col * width
 
 # Explore the perturbation scores of cells.
 for (split_by in c("default", calcPerturbSig_params[["split_by_col"]], runMixscape_params[["split_by_col"]])){
@@ -69,20 +72,6 @@ for (split_by in c("default", calcPerturbSig_params[["split_by_col"]], runMixsca
                width=width, 
                height=height)
     }
-
-#     width_panel <- n_col * width
-#     height_panel <- ceiling(length(perturb_scores)/n_col) * height
-
-#     perturb_scores_panel <- wrap_plots(perturb_scores, ncol = n_col)
-
-    # save plot
-#     options(repr.plot.width=width_panel, repr.plot.height=height_panel)
-#     print(perturb_scores_panel)
-#     ggsave_new(filename = paste0("MIXSCAPE_ALL_PerturbScores_",split_by), 
-#                results_path=post_prob_plot_path, 
-#                plot=perturb_scores_panel, 
-#                width=width_panel, 
-#                height=height_panel)
 }
 
 
@@ -130,18 +119,6 @@ for (split_by in c("default", calcPerturbSig_params[["split_by_col"]], runMixsca
                height=height)
         
     }
-#     height_panel <- ceiling(length(post_probs)/n_col) * height
-
-#     post_probs_panel <- wrap_plots(post_probs, ncol = n_col)
-
-    # save plot
-#     options(repr.plot.width=width_panel, repr.plot.height=height_panel)
-#     print(post_probs_panel)
-#     ggsave_new(filename = paste0("MIXSCAPE_ALL_PosteriorProbabilities_",split_by), 
-#                results_path=post_prob_plot_path,
-#                plot=post_probs_panel, 
-#                width=width_panel, 
-#                height=height_panel)
 }
 
 # check if antibody_capture_flag is present
@@ -182,7 +159,7 @@ if (antibody_capture_flag != ""){
             combine = FALSE,
             fill.by = "feature",
             flip = FALSE
-           ) + theme(axis.text = element_text(size = 8),
+           )[[1]] + theme(axis.text = element_text(size = 8),
                      legend.text = element_text(size=8),
                      axis.title.y = element_text(size=8),
                      axis.title.x = element_blank())
@@ -194,25 +171,3 @@ if (antibody_capture_flag != ""){
                height = height)
     }
 }
-    
-# OLD CODE
-
-#     # adapt theme for each plot          
-#     violin_plots <- lapply(violin_plots, function(tmp_plot) tmp_plot + theme(axis.text = element_text(size = 8),
-#                                                                              legend.text = element_text(size=8),
-#                                                                              axis.title.y = element_text(size=8),
-#                                                                              axis.title.x = element_blank()))             
-
-#     violin_plots_panel <- wrap_plots(violin_plots, ncol = 1)
-
-#     height_panel <- height * length(features)
-#     width_panel <- 0.5 * length(unique(unlist(data[[calcPerturbSig_params[["gene_col"]]]])))
-
-    # save plot
-#     options(repr.plot.width=width_panel, repr.plot.height=height_panel)
-#     print(violin_plots_panel)
-#     ggsave_new(filename = paste0("MIXSCAPE_ALL_",antibody_capture_flag,"_expression"), 
-#                results_path=post_prob_plot_path,
-#                plot=violin_plots_panel, 
-#                width=width_panel, 
-#                height=height_panel)

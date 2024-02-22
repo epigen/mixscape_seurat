@@ -101,8 +101,6 @@ p2 <- p+
   xlab(x_label) +
   custom_theme + NoLegend()
 
-# p2
-
 ggsave_new(filename = "LDA_UMAP", 
            results_path=dirname(lda_plot_path), 
            plot=p2, 

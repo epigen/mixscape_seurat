@@ -34,6 +34,11 @@ if (runMixscape_params[["split_by_col"]]==''){
     mixscape_split_by <- runMixscape_params[["split_by_col"]]
 }
 
+# make directories if not exist
+if (!dir.exists(stat_plots_path)){
+        dir.create(stat_plots_path, recursive = TRUE)
+}
+
 ### load filtered data
 data <- readRDS(file = file.path(filtered_object_path))
 DefaultAssay(object = data) <- assay
@@ -96,7 +101,7 @@ data <- RunMixscape(
   new.class.name = "mixscape_class",
   min.de.genes = runMixscape_params[["min_de_genes"]],
   min.cells = runMixscape_params[["min_cells"]],
-  de.assay = "RNA", # TODO: why not configured assay?
+  de.assay = assay,
   logfc.threshold = runMixscape_params[["lfc_th"]],
   iter.num = 10,
   verbose = TRUE,
@@ -109,9 +114,6 @@ data <- RunMixscape(
 
 ### Plot Mixscape Statistics
 print("Plot Mixscape statistics")
-# plot specs
-# width <- 15
-# height <- 2*ceiling((dim(unique(data[[calcPerturbSig_params[["gene_col"]]]]))[1]-1)/10)
 
 # Calculate percentage of KO cells for all target gene classes.
 stat_table <- table(data$mixscape_class.global, unlist(data[[calcPerturbSig_params[["grna_col"]]]]))
@@ -166,13 +168,11 @@ for (gene in unique(df3$gene)){
     labs(fill = "mixscape class")
     
     ggsave_new(filename = gene, 
-           results_path=dirname(stat_plots_path), 
-           plot=tmp_plot, 
-           width=4, 
-           height=4)
+           results_path = stat_plots_path, 
+           plot = tmp_plot, 
+           width = 4, 
+           height = 4)
 }
-                           
-# options(repr.plot.width=4, repr.plot.height=4)
 
 ### save results
 print("Saving results")
