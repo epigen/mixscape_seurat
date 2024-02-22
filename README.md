@@ -1,7 +1,7 @@
 [![DOI](https://zenodo.org/badge/481635018.svg)](https://zenodo.org/badge/latestdoi/481635018)
 
 # scCRISPR-seq Perturbation Analysis Snakemake Workflow using Seurat's Mixscape
-A [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow for performing perturbation analyses of pooled (multimodal) CRISPR screens with scRNA-seq read-out (scCRISPR-seq) powered by the R package [Seurat's](https://satijalab.org/seurat/index.html) method [Mixscape](https://satijalab.org/seurat/articles/mixscape_vignette.html).
+A [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow for performing perturbation analyses of pooled (multimodal) CRISPR screens with scRNA-seq read-out (scCRISPR-seq, CROP-seq, Perturb-seq) powered by the R package [Seurat's](https://satijalab.org/seurat/index.html) method [Mixscape](https://satijalab.org/seurat/articles/mixscape_vignette.html).
 
 This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details, instructions and modules check out the project's repository. Please consider starring and sharing modules that are useful to you, this helps me in prioritizing my efforts!
 
@@ -19,6 +19,7 @@ Table of contents
   * [Configuration](#configuration)
   * [Example](#example)
   * [Links](#links)
+  * [Resources](#resources)
   * [Publications](#publications)
 
 # Authors
@@ -31,6 +32,7 @@ This project wouldn't be possible without the following software and it's depend
 
 | Software       | Reference (DOI)                                   |
 | :------------: | :-----------------------------------------------: |
+| data.table     | https://r-datatable.com                           |
 | ggplot2        | https://ggplot2.tidyverse.org/                    |
 | Mixscape       | https://doi.org/10.1038/s41588-021-00778-2        |
 | mixtools       | https://CRAN.R-project.org/package=mixtools       |
@@ -39,7 +41,7 @@ This project wouldn't be possible without the following software and it's depend
 | Snakemake      | https://doi.org/10.12688/f1000research.29032.2    |
 
 # Methods
-This is a template for the Methods section of a scientific publication and is intended to serve as a starting point. Only retain paragraphs relevant to your analysis. References [ref] to the respective publications are curated in the software table above. Versions (ver) have to be read out from the respective conda environment specifications (.yaml file) or post execution. Parameters that have to be adapted depending on the data or workflow configurations are denoted in squared brackets e.g. [X].
+This is a template for the Methods section of a scientific publication and is intended to serve as a starting point. Only retain paragraphs relevant to your analysis. References [ref] to the respective publications are curated in the software table above. Versions (ver) have to be read out from the respective conda environment specifications (workflow/envs/\*.yaml file) or post execution in the result directory (/envs/scrnaseq_processing_seurat/\*.yaml). Parameters that have to be adapted depending on the data or workflow configurations are denoted in squared brackets e.g., [X].
 
 The outlined analyses were performed using the R package Seurat (ver) [ref] unless stated otherwise.
 
@@ -53,17 +55,18 @@ The outlined analyses were performed using the R package Seurat (ver) [ref] unle
 
 # Features
 The workflow performs all steps of the [Mixscape Vignette](https://satijalab.org/seurat/articles/mixscape_vignette.html) on all samples in the annotation file according to the parametrization in the config file.
-- Calculation of local perturbation signatures
-  - all and filtered (=pertubed-only) perturbation (PRTB) signatures (CSV)
-- Mixscape classification of perturbed cells versus cells with no detectable perturbation
-- Visualization of Mixscape results
-  - Statistics of the Mixscape classification on a target gene and guide RNA basis (Bar plots)
-  - Perturbation scores of cells split by their mixscape classification (Density plots)
-  - Posterior probability values in non perturbed and perturbed cells (Violin plots)
-  - if Antibody Capture was used: Surface protein expression measurements split by perturbation classification of cells (Violin plots)
+- Calculation of local perturbation signatures (`{analysis}/`)
+  - all and filtered (i.e., only pertubed cells) perturbation signatures (`{ALL|FILTERED}_PRTB_data.csv`).
+- Mixscape classification of perturbed cells versus cells with no detectable perturbation (`{analysis}/{ALL|FILTERED}_*`)
+  - Mixscape classification statistics (`{analysis}/mixscape_stats.csv`).
+- Visualization of Mixscape results (`{analysis}/plots/`)
+  - Statistics of the Mixscape classification on a target gene and guide RNA basis as bar plots (`stats/{KO}.png').
+  - Perturbation scores of cells split by their mixscape classification as density plots (`PerturbScore/{KO}_{split}.png').
+  - Posterior probability values in non perturbed and perturbed cells as violin plots (`PosteriorProbability/{KO}_{split}.png').
+  - (optional) if Antibody Capture was used: Surface protein expression measurements split by perturbation classification of cells as violin plots (`{Antibody_Capture_flag}_expression/{protein}.png').
 - Analysis of perturbation responses with Linear Discriminant Analysis (LDA)
-  - LDA components (CSV)
-  - Visualization using UMAP
+  - LDA components (`LDA_data.csv`)
+  - 2D visualization using UMAP as scatter plot (`{analysis}/plots/LDA_UMAP`).
 
 # Usage
 Read the [Mixscape Vignette](https://satijalab.org/seurat/articles/mixscape_vignette.html).
@@ -79,6 +82,16 @@ Detailed specifications can be found here [./config/README.md](./config/README.m
 - [GitHub Page](https://epigen.github.io/mixscape_seurat/)
 - [Zenodo Repository](https://doi.org/10.5281/zenodo.8424761)
 - [Snakemake Workflow Catalog Entry](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/mixscape_seurat)
+
+# Resources
+- Recommended compatible [MR.PARETO](https://github.com/epigen/mr.pareto) modules:
+  - for upstream processing (before)
+    - [scRNA-seq Data Processing & Visualization](https://github.com/epigen/scrnaseq_processing_seurat) for processing and preparing a Seurat object as input.
+  - for downstream analyses (after)
+    - [Unsupervised Analysis](https://github.com/epigen/unsupervised_analysis) to understand and visualize similarities and variations between cells (transcriptome, perturbation signatures, LDA results,...), including dimensionality reduction and cluster analysis.
+    - [Differential Analysis using Seurat](https://github.com/epigen/dea_seurat) to identify and visualize statistically significantly differentially expressed genes between perturbation/KO groups and control (i.e., Non Targeting / Wild Type cells).
+    - [Unsupervised Analysis](https://github.com/epigen/unsupervised_analysis) to understand and visualize similarities and variations between cells (transcriptome, perturbation signatures, LDA results,...), including dimensionality reduction and cluster analysis.
+  - [Enrichment Analysis](https://github.com/epigen/enrichment_analysis) for biomedical interpretation of differential analysis results using prior knowledge.
 
 # Publications
 The following publications successfully used this module for their analyses.
