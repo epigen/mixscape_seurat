@@ -7,8 +7,8 @@ from snakemake.utils import min_version
 
 min_version("7.15.2")
 
-##### container image #####
-# containerized: "docker://sreichl/..."
+##### module name #####
+module_name = "mixscape_seurat"
 
 ##### setup report #####
 report: os.path.join("report", "workflow.rst")
@@ -23,16 +23,15 @@ result_path = os.path.join(config["result_path"],'mixscape_seurat')
 
 rule all:
     input:
-        mixscape_lda_objects = expand(os.path.join(result_path,'{sample}','MIXSCAPE_FILTERED_LDA_object.rds'), 
+        mixscape_lda_objects = expand(os.path.join(result_path,'{sample}','FILTERED_object.rds'), 
                                sample=samples),
-        prtb_score_plot = expand(os.path.join(result_path,'{sample}','plots','MIXSCAPE_ALL_PerturbScores_{split_by}.png'),
-                                 sample=samples,
-                                 split_by=['',config["CalcPerturbSig"]["split_by_col"], config["RunMixscape"]["split_by_col"]]),
-        envs = expand(os.path.join(config["result_path"],'envs','mixscape_seurat','{env}.yaml'),env=['seurat_mixscape','seurat_lda']),
-        configs = os.path.join(config["result_path"],'configs','mixscape_seurat','{}_config.yaml'.format(config["project_name"])),
-        annotations = os.path.join(config["result_path"],'configs','mixscape_seurat','{}_annot.csv'.format(config["project_name"])),
+        prtb_score_plots = expand(os.path.join(result_path,'{sample}','plots','PerturbScore'),
+                                 sample=samples),
+        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['seurat_mixscape','seurat_lda']),
+        configs = os.path.join(config["result_path"],'configs',module_name,'{}_config.yaml'.format(config["project_name"])),
+        annotations = os.path.join(config["result_path"],'configs',module_name,'{}_annot.csv'.format(config["project_name"])),
     resources:
-        mem_mb=config.get("mem", "16000"),
+        mem_mb=config.get("mem", "8000"),
     threads: config.get("threads", 1)
     log:
         os.path.join("logs","rules","all.log"),

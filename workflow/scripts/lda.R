@@ -13,18 +13,14 @@ mixscape_object_path <- snakemake@input[["mixscape_object"]]
 # outputs
 lda_object_path <- snakemake@output[["lda_object"]]
 lda_plot_path <- snakemake@output[["lda_plot"]] 
+lda_data_path <- snakemake@output[["lda_data"]] 
+filtered_prtb_data_path <- snakemake@output[["filtered_prtb_data"]]
 
 # parameters
-assay <- snakemake@params[["assay"]]
-calcPerturbSig_params <- snakemake@params[["CalcPerturbSig_params"]]
-runMixscape_params <- snakemake@params[["RunMixscape_params"]]
-mixscapeLDA_params <- snakemake@params[["MixscapeLDA_params"]]
-
-result_dir <- dirname(lda_object_path)
-# make directories if not exist
-if (!dir.exists(result_dir)){
-        dir.create(result_dir, recursive = TRUE)
-    }
+assay <- snakemake@config[["assay"]]
+calcPerturbSig_params <- snakemake@config[["CalcPerturbSig"]]
+runMixscape_params <- snakemake@config[["RunMixscape"]]
+mixscapeLDA_params <- snakemake@config[["MixscapeLDA"]]
 
 ### load mixscape data
 data <- readRDS(file = file.path(mixscape_object_path))
@@ -107,7 +103,7 @@ p2 <- p+
 
 # p2
 
-ggsave_new(filename = "MIXSCAPE_FILTERED_LDA_UMAP", 
+ggsave_new(filename = "LDA_UMAP", 
            results_path=dirname(lda_plot_path), 
            plot=p2, 
            width=width, 
@@ -118,10 +114,10 @@ ggsave_new(filename = "MIXSCAPE_FILTERED_LDA_UMAP",
 # save seurat object and metadata
 save_seurat_object(seurat_obj=sub, 
                    result_dir=dirname(lda_object_path), 
-                   prefix="MIXSCAPE_FILTERED_LDA_")
+                   prefix="FILTERED_")
 
 # save matrix of LDA values
-fwrite(as.data.frame(lda_data), file=file.path(result_dir, paste0('MIXSCAPE_FILTERED_LDA_data.csv')), row.names=TRUE)
+fwrite(as.data.frame(lda_data), file=file.path(lda_data_path), row.names=TRUE)
                            
 # save matrix of PRTB values
-fwrite(as.data.frame(GetAssayData(object = sub, slot = "data", assay = "PRTB")), file=file.path(result_dir, paste0('MIXSCAPE_FILTERED_PRTB_',slot,'.csv')), row.names=TRUE)
+fwrite(as.data.frame(GetAssayData(object = sub, slot = "data", assay = "PRTB")), file=file.path(filtered_prtb_data_path), row.names=TRUE)

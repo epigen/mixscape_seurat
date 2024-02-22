@@ -2,20 +2,38 @@
 # visualize Mixscape analysis results
 rule visualize:
     input:
-        mixscape_object = os.path.join(result_path,'{sample}','MIXSCAPE_ALL_object.rds'),
+        mixscape_object = os.path.join(result_path,'{sample}','ALL_object.rds'),
     output:
-        prtb_score_plot = report(expand(os.path.join(result_path,'{{sample}}','plots','MIXSCAPE_ALL_PerturbScores_{split_by}.png'), split_by=['',config["CalcPerturbSig"]["split_by_col"], config["RunMixscape"]["split_by_col"]]), 
-                          caption="../report/PerturbScores.rst", 
-                          category="{}_mixscape_seurat".format(config["project_name"]), 
-                          subcategory="{sample}"),
-        post_prob_plot = report(expand(os.path.join(result_path,'{{sample}}','plots','MIXSCAPE_ALL_PosteriorProbabilities_{split_by}.png'), split_by=['',config["CalcPerturbSig"]["split_by_col"], config["RunMixscape"]["split_by_col"]]), 
-                          caption="../report/PosteriorProbabilities.rst", 
-                          category="{}_mixscape_seurat".format(config["project_name"]), 
-                          subcategory="{sample}"),
-        ab_expr_plot = report(os.path.join(result_path,'{sample}','plots','MIXSCAPE_ALL_{}_expression.png'.format(config["Antibody_Capture"])),
-                          caption="../report/AntibodyExpression.rst", 
-                          category="{}_mixscape_seurat".format(config["project_name"]), 
-                          subcategory="{sample}") if config["Antibody_Capture"]!="" else [],
+        prtb_score_plots = report(directory(os.path.join(result_path,'{sample}','plots','PerturbScore')), 
+                          patterns=["{ko}.png"],
+                                  caption="../report/PerturbScores.rst", 
+                          category="{}_{}".format(config["project_name"], module_name),
+                          subcategory="{sample}",
+                          labels={
+                              "name": "{ko}",
+                              "type": "Perturb Score",
+                              "misc": "PNG",
+                                  }),
+        post_prob_plots = report(directory(os.path.join(result_path,'{sample}','plots','PosteriorProbability')), 
+                          patterns=["{ko}.png"],
+                                 caption="../report/PosteriorProbabilities.rst", 
+                          category="{}_{}".format(config["project_name"], module_name),
+                          subcategory="{sample}",
+                          labels={
+                              "name": "{ko}",
+                              "type": "Posterior Probability",
+                              "misc": "Violin",
+                                  }),
+        ab_expr_plots = report(directory(os.path.join(result_path,'{sample}','plots','{}_expression'.format(config["Antibody_Capture"]))),
+                          patterns=["{antibody}.png"],
+                               caption="../report/AntibodyExpression.rst", 
+                          category="{}_{}".format(config["project_name"], module_name),
+                          subcategory="{sample}",
+                          labels={
+                              "name": "{antibody}",
+                              "type": "Expression",
+                              "misc": "Violin",
+                                  }) if config["Antibody_Capture"]!="" else [],
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
@@ -25,8 +43,5 @@ rule visualize:
         os.path.join("logs","rules","visualize_{sample}.log"),
     params:
         partition=config.get("partition"),
-        CalcPerturbSig_params = config["CalcPerturbSig"],
-        RunMixscape_params = config["RunMixscape"],
-        antibody_capture_flag = config["Antibody_Capture"],
     script:
         "../scripts/visualize.R"

@@ -11,14 +11,16 @@ filtered_object_path <- snakemake@input[[1]]
 
 # outputs
 mixscape_object_path <- snakemake@output[["mixscape_object"]]
-mixscape_plot_path <- snakemake@output[["mixscape_plot"]] 
+stat_plots_path <- snakemake@output[["stat_plots"]]
+prtb_data_path <- snakemake@output[["prtb_data"]]
+mixscape_stats_path <- snakemake@output[["mixscape_stats"]]
 
 # parameters
-assay <- snakemake@params[["assay"]]
-variable_features_only <- snakemake@params[["variable_features_only"]] 
-calcPerturbSig_params <- snakemake@params[["CalcPerturbSig_params"]]
-runMixscape_params <- snakemake@params[["RunMixscape_params"]]
-grna_split_symbol <- snakemake@params[["grna_split_symbol"]]
+assay <- snakemake@config[["assay"]]
+variable_features_only <- snakemake@config[["variable_features_only"]] 
+calcPerturbSig_params <- snakemake@config[["CalcPerturbSig"]]
+runMixscape_params <- snakemake@config[["RunMixscape"]]
+grna_split_symbol <- snakemake@config[["grna_split_symbol"]]
 
 if (calcPerturbSig_params[["split_by_col"]]==''){
     perturbSig_split_by <- NULL
@@ -31,12 +33,6 @@ if (runMixscape_params[["split_by_col"]]==''){
 }else{
     mixscape_split_by <- runMixscape_params[["split_by_col"]]
 }
-
-result_dir <- dirname(mixscape_object_path)
-# make directories if not exist
-if (!dir.exists(result_dir)){
-        dir.create(result_dir, recursive = TRUE)
-    }
 
 ### load filtered data
 data <- readRDS(file = file.path(filtered_object_path))
@@ -72,6 +68,7 @@ data <- RunPCA(object = data, features = features)
 
 # Calculate perturbation signature (PRTB).
 # https://satijalab.org/seurat/reference/calcperturbsig
+print("Calculating perturbation signature (PRTB)")
 data <- CalcPerturbSig(
   object = data,
   assay = assay,
@@ -89,6 +86,7 @@ data <- CalcPerturbSig(
 
 # Run mixscape.
 # https://satijalab.org/seurat/reference/runmixscape
+print("Running Mixscape")
 data <- RunMixscape(
   object = data,
   assay = "PRTB",
@@ -98,10 +96,10 @@ data <- RunMixscape(
   new.class.name = "mixscape_class",
   min.de.genes = runMixscape_params[["min_de_genes"]],
   min.cells = runMixscape_params[["min_cells"]],
-  de.assay = "RNA",
+  de.assay = "RNA", # TODO: why not configured assay?
   logfc.threshold = runMixscape_params[["lfc_th"]],
   iter.num = 10,
-  verbose = FALSE,
+  verbose = TRUE,
   split.by = mixscape_split_by,
   fine.mode = as.logical(runMixscape_params[["mixscape_fine_mode"]]),
   fine.mode.labels = runMixscape_params[["grna_col"]],
@@ -110,10 +108,10 @@ data <- RunMixscape(
 
 
 ### Plot Mixscape Statistics
-
+print("Plot Mixscape statistics")
 # plot specs
-width <- 15
-height <- 2*ceiling((dim(unique(data[[calcPerturbSig_params[["gene_col"]]]]))[1]-1)/10)
+# width <- 15
+# height <- 2*ceiling((dim(unique(data[[calcPerturbSig_params[["gene_col"]]]]))[1]-1)/10)
 
 # Calculate percentage of KO cells for all target gene classes.
 stat_table <- table(data$mixscape_class.global, unlist(data[[calcPerturbSig_params[["grna_col"]]]]))
@@ -133,38 +131,58 @@ df3 <- df2[-c(which(df2$gene == calcPerturbSig_params[["nt_term"]])),]
 df3$Var1 <- factor(df3$Var1, levels = c("NP", "KO"))
 df3 <- df3[!is.na(df3$Var1),]
                            
-p1 <- ggplot(df3, aes(x = guide_number, y = value*100, fill= Var1)) +
-  geom_bar(stat= "identity") +
-  theme_classic()+
-  scale_fill_manual(values = c("grey79","coral1")) + 
-  ylab("% of cells") +
-  xlab("sgRNA")
+# p1 <- ggplot(df3, aes(x = guide_number, y = value*100, fill= Var1)) +
+#   geom_bar(stat= "identity") +
+#   theme_classic()+
+#   scale_fill_manual(values = c("grey79","coral1")) + 
+#   ylab("% of cells") +
+#   xlab("sgRNA")
 
-p1 <- p1 + theme(axis.text.x = element_text(size = 10, hjust = 1), 
-           axis.text.y = element_text(size = 10), 
-           axis.title = element_text(size = 8), 
-           strip.text = element_text(size=8, face = "bold")) + 
-  facet_wrap(vars(gene),ncol = 10, scales = "free") +
-  labs(fill = "mixscape class") +theme(legend.title = element_text(size = 12),
-          legend.text = element_text(size = 12))
+# p1 <- p1 + theme(axis.text.x = element_text(size = 10, hjust = 1), 
+#            axis.text.y = element_text(size = 10), 
+#            axis.title = element_text(size = 8), 
+#            strip.text = element_text(size=8, face = "bold")) + 
+#   facet_wrap(vars(gene),ncol = 10, scales = "free") +
+#   labs(fill = "mixscape class") +theme(legend.title = element_text(size = 12),
+#           legend.text = element_text(size = 12))
 
 # p1
-                           
-ggsave_new(filename = "MIXSCAPE_ALL_stats", 
-           results_path=dirname(mixscape_plot_path), 
-           plot=p1, 
-           width=width, 
-           height=height)
 
+for (gene in unique(df3$gene)){
+   tmp_plot <- ggplot(df3[df3$gene==gene,], aes(x = guide_number, y = value*100, fill= Var1)) +
+    geom_bar(stat= "identity") +
+    theme_classic()+
+    scale_fill_manual(values = c("grey79","coral1")) +
+    ylab("% of cells") +
+    xlab("sgRNA") +
+    ggtitle(gene) +
+    theme(axis.text.x = element_text(size = 10), 
+          axis.text.y = element_text(size = 10),
+          axis.title = element_text(size = 10),
+          strip.text = element_text(size = 10, face = "bold"),
+          legend.title = element_text(size = 10),
+          legend.text = element_text(size = 10),
+         plot.title = element_text(hjust = 0.5)) +
+    labs(fill = "mixscape class")
+    
+    ggsave_new(filename = gene, 
+           results_path=dirname(stat_plots_path), 
+           plot=tmp_plot, 
+           width=4, 
+           height=4)
+}
+                           
+# options(repr.plot.width=4, repr.plot.height=4)
 
 ### save results
+print("Saving results")
 # save seurat object and metadata
 save_seurat_object(seurat_obj=data, 
                    result_dir=dirname(mixscape_object_path), 
-                   prefix="MIXSCAPE_ALL_")
+                   prefix="ALL_")
  
 # save mixscape statistics
-fwrite(as.data.frame(t(stat_table)), file=file.path(result_dir, paste0('MIXSCAPE_ALL_stats.csv')), row.names=TRUE)
+fwrite(as.data.frame(t(stat_table)), file=file.path(mixscape_stats_path), row.names=TRUE)
                            
 # save matrix of PRTB values; slots counts and scale.data are emtpy -> only save data slot
-fwrite(as.data.frame(GetAssayData(object = data, slot = "data", assay = "PRTB")), file=file.path(result_dir, paste0('MIXSCAPE_ALL_PRTB_',slot,'.csv')), row.names=TRUE)
+fwrite(as.data.frame(GetAssayData(object = data, slot = "data", assay = "PRTB")), file=file.path(prtb_data_path), row.names=TRUE)

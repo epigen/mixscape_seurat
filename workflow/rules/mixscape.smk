@@ -4,43 +4,50 @@ rule mixscape:
     input:
         get_sample_paths
     output:
-        mixscape_object = os.path.join(result_path,'{sample}','MIXSCAPE_ALL_object.rds'),
-        mixscape_data = os.path.join(result_path,'{sample}','MIXSCAPE_ALL_PRTB_data.csv'),
-        mixscape_metadata = os.path.join(result_path,'{sample}','MIXSCAPE_ALL_metadata.csv'),
-        mixscape_plot = report(os.path.join(result_path,'{sample}','plots','MIXSCAPE_ALL_stats.png'), 
+        mixscape_object = os.path.join(result_path,'{sample}','ALL_object.rds'),
+        metadata = os.path.join(result_path,'{sample}','ALL_metadata.csv'),
+        prtb_data = os.path.join(result_path,'{sample}','ALL_PRTB_data.csv'),
+        mixscape_stats = os.path.join(result_path,'{sample}','mixscape_stats.csv'),
+        stat_plots = report(directory(os.path.join(result_path,'{sample}','plots','stats')),
+                            patterns=["{ko}.png"],
                           caption="../report/mixscape.rst", 
-                          category="{}_mixscape_seurat".format(config["project_name"]), 
-                          subcategory="{sample}"),
+                          category="{}_{}".format(config["project_name"], module_name),
+                          subcategory="{sample}",
+                            labels={
+                                "name": "{ko}",
+                                "type": "Statistic",
+                                "misc": "PNG",
+                                  }),
     resources:
         mem_mb=config.get("mem", "16000"),
-    threads: 4*config.get("threads", 1)
+    threads: 8*config.get("threads", 1)
     conda:
         "../envs/seurat_mixscape.yaml"
     log:
         os.path.join("logs","rules","mixscape_{sample}.log"),
     params:
         partition=config.get("partition"),
-        assay = config["assay"],
-        variable_features_only = config["variable_features_only"],
-        CalcPerturbSig_params = config["CalcPerturbSig"],
-        RunMixscape_params = config["RunMixscape"],
-        grna_split_symbol = config["grna_split_symbol"],
     script:
         "../scripts/mixscape.R"
 
 # perform LDA on perturbed subset
 rule lda:
     input:
-        mixscape_object = os.path.join(result_path,'{sample}','MIXSCAPE_ALL_object.rds'),
+        mixscape_object = os.path.join(result_path,'{sample}','ALL_object.rds'),
     output:
-        lda_object = os.path.join(result_path,'{sample}','MIXSCAPE_FILTERED_LDA_object.rds'),
-        lda_data = os.path.join(result_path,'{sample}','MIXSCAPE_FILTERED_LDA_data.csv'),
-        filtered_prtb_data = os.path.join(result_path,'{sample}','MIXSCAPE_FILTERED_PRTB_data.csv'),
-        filtered_metadata = os.path.join(result_path,'{sample}','MIXSCAPE_FILTERED_LDA_metadata.csv'),
-        lda_plot = report(os.path.join(result_path,'{sample}','plots','MIXSCAPE_FILTERED_LDA_UMAP.png'), 
+        lda_object = os.path.join(result_path,'{sample}','FILTERED_object.rds'),
+        filtered_metadata = os.path.join(result_path,'{sample}','FILTERED_metadata.csv'),
+        lda_data = os.path.join(result_path,'{sample}','LDA_data.csv'),
+        filtered_prtb_data = os.path.join(result_path,'{sample}','FILTERED_PRTB_data.csv'),
+        lda_plot = report(os.path.join(result_path,'{sample}','plots','LDA_UMAP.png'), 
                           caption="../report/lda_umap.rst", 
-                          category="{}_mixscape_seurat".format(config["project_name"]), 
-                          subcategory="{sample}"),
+                          category="{}_{}".format(config["project_name"], module_name),
+                          subcategory="{sample}",
+                          labels={
+                              "name": "LDA",
+                              "type": "UMAP",
+                              "misc": "PNG",
+                                  }),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
@@ -50,9 +57,5 @@ rule lda:
         os.path.join("logs","rules","lda_{sample}.log"),
     params:
         partition=config.get("partition"),
-        assay = config["assay"],
-        CalcPerturbSig_params = config["CalcPerturbSig"],
-        RunMixscape_params = config["RunMixscape"],
-        MixscapeLDA_params = config["MixscapeLDA"],
     script:
         "../scripts/lda.R"
