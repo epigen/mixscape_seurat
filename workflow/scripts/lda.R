@@ -15,6 +15,7 @@ lda_object_path <- snakemake@output[["lda_object"]]
 lda_plot_path <- snakemake@output[["lda_plot"]] 
 lda_data_path <- snakemake@output[["lda_data"]] 
 filtered_prtb_data_path <- snakemake@output[["filtered_prtb_data"]]
+filtered_assay_data_path <- snakemake@output[["filtered_assay_data"]]
 
 # parameters
 assay <- snakemake@config[["assay"]]
@@ -119,3 +120,6 @@ fwrite(as.data.frame(lda_data), file=file.path(lda_data_path), row.names=TRUE)
                            
 # save matrix of PRTB values
 fwrite(as.data.frame(GetAssayData(object = sub, slot = "data", assay = "PRTB")), file=file.path(filtered_prtb_data_path), row.names=TRUE)
+
+# save matrix of assay values
+fwrite(as.data.frame(GetAssayData(object = sub, slot = "data", assay = assay)), file=file.path(filtered_assay_data_path), row.names=TRUE)

@@ -38,6 +38,7 @@ rule lda:
         lda_object = os.path.join(result_path,'{sample}','FILTERED_object.rds'),
         filtered_metadata = os.path.join(result_path,'{sample}','FILTERED_metadata.csv'),
         lda_data = os.path.join(result_path,'{sample}','LDA_data.csv'),
+        filtered_assay_data = os.path.join(result_path,'{sample}','FILTERED_{}_data.csv'.format(config["assay"]),
         filtered_prtb_data = os.path.join(result_path,'{sample}','FILTERED_PRTB_data.csv'),
         lda_plot = report(os.path.join(result_path,'{sample}','plots','LDA_UMAP.png'), 
                           caption="../report/lda_umap.rst", 
