@@ -184,7 +184,7 @@ save_seurat_object(seurat_obj=data,
                    prefix="ALL_")
  
 # refromat & save mixscape statistics
-stat_table <- reshape(t(stat_table), timevar = "Var2", idvar = "Var1", direction = "wide")
+stat_table <- reshape(as.data.frame(t(stat_table)), timevar = "Var2", idvar = "Var1", direction = "wide")
 colnames(stat_table) <- gsub("Freq.", "", colnames(stat_table))
 colnames(stat_table)[1] <- "gRNA"
 fwrite(as.data.frame(stat_table), file=file.path(mixscape_stats_path), row.names=FALSE)
