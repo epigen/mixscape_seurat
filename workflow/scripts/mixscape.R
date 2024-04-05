@@ -47,6 +47,7 @@ DefaultAssay(object = data) <- assay
 
 # check if data is normalized, if not normalize the data
 if (all(GetAssayData(object = data, slot = "counts", assay = assay) == GetAssayData(object = data, slot = "data", assay = assay))){
+    print("Normalizing data")
     data <- NormalizeData(object = data)
 }
 
@@ -63,6 +64,7 @@ if (variable_features_only==1){
 
 # check if data is scaled, if not scale data
 if (dim(GetAssayData(object = data, slot = "scale.data", assay = assay))[1]==0){
+    print("Scaling data")
     data <- ScaleData(object = data, features = features)
 }
 
@@ -181,8 +183,11 @@ save_seurat_object(seurat_obj=data,
                    result_dir=dirname(mixscape_object_path), 
                    prefix="ALL_")
  
-# save mixscape statistics
-fwrite(as.data.frame(t(stat_table)), file=file.path(mixscape_stats_path), row.names=TRUE)
+# refromat & save mixscape statistics
+stat_table <- reshape(t(stat_table), timevar = "Var2", idvar = "Var1", direction = "wide")
+colnames(stat_table) <- gsub("Freq.", "", colnames(stat_table))
+colnames(stat_table)[1] <- "gRNA"
+fwrite(as.data.frame(stat_table), file=file.path(mixscape_stats_path), row.names=FALSE)
                            
 # save matrix of PRTB values; slots counts and scale.data are emtpy -> only save data slot
 fwrite(as.data.frame(GetAssayData(object = data, slot = "data", assay = "PRTB")), file=file.path(prtb_data_path), row.names=TRUE)
