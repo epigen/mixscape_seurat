@@ -7,6 +7,10 @@ library("scales")
 # source("workflow/scripts/utils.R")
 snakemake@source("./utils.R")
 
+# set expressions option to maximum to avoid "Error: protect(): protection stack overflow"
+# from here: https://stackoverflow.com/questions/32826906/how-to-solve-protection-stack-overflow-issue-in-r-studio
+options(expressions = 5e5)
+
 # inputs
 mixscape_object_path <- snakemake@input[["mixscape_object"]]
 
