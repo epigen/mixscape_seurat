@@ -21,6 +21,7 @@ variable_features_only <- snakemake@config[["variable_features_only"]]
 calcPerturbSig_params <- snakemake@config[["CalcPerturbSig"]]
 runMixscape_params <- snakemake@config[["RunMixscape"]]
 grna_split_symbol <- snakemake@config[["grna_split_symbol"]]
+npcs <- max(snakemake@config[["RunMixscape"]][["ndims"]], snakemake@config[["MixscapeLDA"]][["npcs"]])
 
 if (calcPerturbSig_params[["split_by_col"]]==''){
     perturbSig_split_by <- NULL
@@ -69,7 +70,7 @@ if (dim(GetAssayData(object = data, slot = "scale.data", assay = assay))[1]==0){
 }
 
 # Run Principle Component Analysis (PCA) to reduce the dimensionality of the data.
-data <- RunPCA(object = data, features = features)
+data <- RunPCA(object = data, features = features, npcs = npcs)
 
 ### Mixscape Analysis
 
