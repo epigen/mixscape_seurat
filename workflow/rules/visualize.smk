@@ -41,7 +41,5 @@ rule visualize:
         "../envs/seurat_mixscape.yaml"
     log:
         os.path.join("logs","rules","visualize_{sample}.log"),
-    params:
-        partition=config.get("partition"),
     script:
         "../scripts/visualize.R"

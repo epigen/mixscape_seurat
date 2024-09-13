@@ -25,8 +25,6 @@ rule mixscape:
         "../envs/seurat_mixscape.yaml"
     log:
         os.path.join("logs","rules","mixscape_{sample}.log"),
-    params:
-        partition=config.get("partition"),
     script:
         "../scripts/mixscape.R"
 
@@ -56,7 +54,5 @@ rule lda:
         "../envs/seurat_lda.yaml"
     log:
         os.path.join("logs","rules","lda_{sample}.log"),
-    params:
-        partition=config.get("partition"),
     script:
         "../scripts/lda.R"
