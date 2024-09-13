@@ -1,33 +1,30 @@
+[![MR.PARETO](https://img.shields.io/badge/MR.PARETO-red)](https://github.com/epigen/mr.pareto/)
 [![DOI](https://zenodo.org/badge/481635018.svg)](https://zenodo.org/badge/latestdoi/481635018)
+[![](https://tokei.rs/b1/github/epigen/mixscape_seurat?category=code)]() 
+[![](https://tokei.rs/b1/github/epigen/mixscape_seurat?category=files)]()
+[![GitHub license](https://img.shields.io/github/license/epigen/mixscape_seurat)](https://github.com/epigen/mixscape_seurat/blob/master/LICENSE)
+![GitHub Release](https://img.shields.io/github/v/release/epigen/mixscape_seurat)
+[![Snakemake](https://img.shields.io/badge/Snakemake->=8.20.1-green)](https://snakemake.readthedocs.io/en/stable/)
 
-# scCRISPR-seq Perturbation Analysis Snakemake Workflow using Seurat's Mixscape
+# scCRISPR-seq Perturbation Analysis Workflow using Seurat's Mixscape
 A [Snakemake 8](https://snakemake.readthedocs.io/en/stable/) workflow for performing perturbation analyses of pooled (multimodal) CRISPR screens with scRNA-seq read-out (scCRISPR-seq, CROP-seq, Perturb-seq) powered by the R package [Seurat's](https://satijalab.org/seurat/index.html) method [Mixscape](https://satijalab.org/seurat/articles/mixscape_vignette.html).
 
-This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details, instructions and modules check out the project's repository. Please consider starring and sharing modules that are useful to you, this helps me in prioritizing my efforts!
+> [!NOTE]  
+> This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details, instructions, and modules check out the project's repository.
+>
+> ⭐️ **Star and share modules you find valuable** 📤 - help others discover them, and guide our future work!
 
-**If you use this workflow in a publication, please don't forget to give credit to the authors by citing it using this DOI [10.5281/zenodo.8424761](https://doi.org/10.5281/zenodo.8424761).**
+> [!IMPORTANT]  
+> **If you use this workflow in a publication, please don't forget to give credit to the authors by citing it using this DOI [10.5281/zenodo.8424761](https://doi.org/10.5281/zenodo.8424761).**
 
 ![Workflow Rulegraph](./workflow/dags/rulegraph.svg)
-
-Table of contents
-----------------
-  * [Authors](#authors)
-  * [Software](#software)
-  * [Methods](#methods)
-  * [Features](#features)
-  * [Usage](#usage)
-  * [Configuration](#configuration)
-  * [Example](#example)
-  * [Links](#links)
-  * [Resources](#resources)
-  * [Publications](#publications)
 
 # Authors
 - [Stephan Reichl](https://github.com/sreichl)
 - [Christoph Bock](https://github.com/chrbock)
 
 
-# Software
+# 💿 Software
 This project wouldn't be possible without the following software and it's dependencies:
 
 | Software       | Reference (DOI)                                   |
@@ -40,8 +37,8 @@ This project wouldn't be possible without the following software and it's depend
 | Seurat         | https://doi.org/10.1016/j.cell.2021.04.048        |
 | Snakemake      | https://doi.org/10.12688/f1000research.29032.2    |
 
-# Methods
-This is a template for the Methods section of a scientific publication and is intended to serve as a starting point. Only retain paragraphs relevant to your analysis. References [ref] to the respective publications are curated in the software table above. Versions (ver) have to be read out from the respective conda environment specifications (workflow/envs/\*.yaml file) or post execution in the result directory (/envs/scrnaseq_processing_seurat/\*.yaml). Parameters that have to be adapted depending on the data or workflow configurations are denoted in squared brackets e.g., [X].
+# 🔬 Methods
+This is a template for the Methods section of a scientific publication and is intended to serve as a starting point. Only retain paragraphs relevant to your analysis. References [ref] to the respective publications are curated in the software table above. Versions (ver) have to be read out from the respective conda environment specifications (`workflow/envs/*.yaml file`) or post-execution in the result directory (`mixscape_seurat/envs/*.yaml`). Parameters that have to be adapted depending on the data or workflow configurations are denoted in squared brackets e.g., [X].
 
 The outlined analyses were performed using the R package Seurat (ver) [ref] unless stated otherwise.
 
@@ -53,7 +50,7 @@ The outlined analyses were performed using the R package Seurat (ver) [ref] unle
 
 **The analysis and visualizations described here were performed using a publicly available Snakemake [ver] (ref) workflow [10.5281/zenodo.8424761](https://doi.org/10.5281/zenodo.8424761).**
 
-# Features
+# 🚀 Features
 The workflow performs all steps of the [Mixscape Vignette](https://satijalab.org/seurat/articles/mixscape_vignette.html) on all samples in the annotation file according to the parametrization in the config file.
 - Calculation of local perturbation signatures (`{analysis}/`)
   - all and filtered (i.e., only pertubed cells) perturbation signatures (`{ALL|FILTERED}_PRTB_data.csv`).
@@ -68,31 +65,36 @@ The workflow performs all steps of the [Mixscape Vignette](https://satijalab.org
   - LDA components (`LDA_data.csv`)
   - 2D visualization using UMAP as scatter plot (`{analysis}/plots/LDA_UMAP`).
 
-# Usage
+# 🛠️ Usage
 Read the [Mixscape Vignette](https://satijalab.org/seurat/articles/mixscape_vignette.html).
 
-# Configuration
+# ⚙️ Configuration
 Detailed specifications can be found here [./config/README.md](./config/README.md)
 
-# Example
+# 📖 Example
 --- COMING SOON ---
 
-# Links
+# 🔗 Links
 - [GitHub Repository](https://github.com/epigen/mixscape_seurat/)
 - [GitHub Page](https://epigen.github.io/mixscape_seurat/)
 - [Zenodo Repository](https://doi.org/10.5281/zenodo.8424761)
 - [Snakemake Workflow Catalog Entry](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/mixscape_seurat)
 
-# Resources
-- Recommended compatible [MR.PARETO](https://github.com/epigen/mr.pareto) modules:
-  - for upstream processing (before)
-    - [scRNA-seq Data Processing & Visualization](https://github.com/epigen/scrnaseq_processing_seurat) for processing and preparing a Seurat object as input.
-  - for downstream analyses (after)
-    - [Unsupervised Analysis](https://github.com/epigen/unsupervised_analysis) to understand and visualize similarities and variations between cells (transcriptome, perturbation signatures, LDA results,...), including dimensionality reduction and cluster analysis.
-    - [Differential Analysis using Seurat](https://github.com/epigen/dea_seurat) to identify and visualize statistically significantly differentially expressed genes between perturbation/KO groups and control (i.e., Non Targeting / Wild Type cells).
-    - [Unsupervised Analysis](https://github.com/epigen/unsupervised_analysis) to understand and visualize similarities and variations between cells (transcriptome, perturbation signatures, LDA results,...), including dimensionality reduction and cluster analysis.
-  - [Enrichment Analysis](https://github.com/epigen/enrichment_analysis) for biomedical interpretation of differential analysis results using prior knowledge.
+# 📚 Resources
+- Recommended compatible [MR.PARETO](https://github.com/epigen/mr.pareto) modules for
+  - upstream processing:
+    - [scRNA-seq Data Processing & Visualization](https://github.com/epigen/scrnaseq_processing_seurat) for processing (multimodal) single-cell transcriptome data.input.
+  - downstream analyses:
+    - [Unsupervised Analysis](https://github.com/epigen/unsupervised_analysis) to understand and visualize similarities and variations between cells/samples, including dimensionality reduction and cluster analysis. Useful for all tabular data including single-cell and bulk sequencing data.
+    - [Differential Analysis using Seurat](https://github.com/epigen/dea_seurat) to identify and visualize statistically significantly different features (e.g., genes or proteins) between groups.
+    - [Enrichment Analysis](https://github.com/epigen/enrichment_analysis) for biomedical interpretation of (differential) analysis results using prior knowledge.
+- Mixscape publication: [Papalexi et al. (2021) Nature Genetics - "Characterizing the molecular regulation of inhibitory immune checkpoints with multimodal single-cell screens."](https://doi.org/10.1038/s41588-021-00778-2).
 
-# Publications
+# 📑 Publications
 The following publications successfully used this module for their analyses.
+- [FirstAuthors et al. (202X) Journal Name - Paper Title.](https://doi.org/10.XXX/XXXX)
 - ...
+
+# ⭐ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=epigen/mixscape_seurat&type=Date)](https://star-history.com/#epigen/mixscape_seurat&Date)
