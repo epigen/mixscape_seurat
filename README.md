@@ -1,4 +1,4 @@
-[![MR.PARETO](https://img.shields.io/badge/MR.PARETO-red)](https://github.com/epigen/mr.pareto/)
+[![MrBiomics](https://img.shields.io/badge/MrBiomics-red)](https://github.com/epigen/MrBiomics/)
 [![DOI](https://zenodo.org/badge/481635018.svg)](https://zenodo.org/badge/latestdoi/481635018)
 [![](https://tokei.rs/b1/github/epigen/mixscape_seurat?category=code)]() 
 [![](https://tokei.rs/b1/github/epigen/mixscape_seurat?category=files)]()
@@ -10,7 +10,7 @@
 A [Snakemake 8](https://snakemake.readthedocs.io/en/stable/) workflow for performing perturbation analyses of pooled (multimodal) CRISPR screens with scRNA-seq read-out (scCRISPR-seq, CROP-seq, Perturb-seq) powered by the R package [Seurat's](https://satijalab.org/seurat/index.html) method [Mixscape](https://satijalab.org/seurat/articles/mixscape_vignette.html).
 
 > [!NOTE]  
-> This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details, instructions, and modules check out the project's repository.
+> This workflow adheres to the module specifications of [MrBiomics](https://github.com/epigen/MrBiomics), an effort to augment research by modularizing (biomedical) data science. For more details, instructions, and modules check out the project's repository.
 >
 > ⭐️ **Star and share modules you find valuable** 📤 - help others discover them, and guide our future work!
 
@@ -81,7 +81,7 @@ Detailed specifications can be found here [./config/README.md](./config/README.m
 - [Snakemake Workflow Catalog Entry](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/mixscape_seurat)
 
 # 📚 Resources
-- Recommended compatible [MR.PARETO](https://github.com/epigen/mr.pareto) modules for
+- Recommended compatible [MrBiomics](https://github.com/epigen/MrBiomics) modules for
   - upstream processing:
     - [scRNA-seq Data Processing & Visualization](https://github.com/epigen/scrnaseq_processing_seurat) for processing (multimodal) single-cell transcriptome data.input.
   - downstream analyses:
