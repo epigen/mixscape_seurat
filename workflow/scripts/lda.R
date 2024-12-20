@@ -5,7 +5,8 @@ library("scales")
 
 # source utility functions
 # source("workflow/scripts/utils.R")
-snakemake@source("./utils.R")
+# snakemake@source("./utils.R") # does not work when loaded as module (https://github.com/snakemake/snakemake/issues/2205)
+source(snakemake@params[["utils_path"]])
 
 # set expressions option to maximum to avoid "Error: protect(): protection stack overflow"
 # from here: https://stackoverflow.com/questions/32826906/how-to-solve-protection-stack-overflow-issue-in-r-studio

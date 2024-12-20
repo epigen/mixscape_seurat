@@ -18,6 +18,8 @@ rule mixscape:
                                 "type": "Statistic",
                                 "misc": "PNG",
                                   }),
+    params:
+        utils_path = workflow.source_path("../scripts/utils.R"),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: 8*config.get("threads", 1)
@@ -47,6 +49,8 @@ rule lda:
                               "type": "UMAP",
                               "misc": "PNG",
                                   }),
+    params:
+        utils_path = workflow.source_path("../scripts/utils.R"),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)

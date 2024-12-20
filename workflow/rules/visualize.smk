@@ -34,6 +34,8 @@ rule visualize:
                               "type": "Expression",
                               "misc": "Violin",
                                   }) if config["Antibody_Capture"]!="" else [],
+    params:
+        utils_path = workflow.source_path("../scripts/utils.R"),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
