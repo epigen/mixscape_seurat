@@ -72,7 +72,7 @@ Read the [Mixscape Vignette](https://satijalab.org/seurat/articles/mixscape_vign
 Detailed specifications can be found here [./config/README.md](./config/README.md)
 
 # 📖 Example
---- COMING SOON ---
+Explore a detailed example showcasing module usage and up-/downstream analysis in our comprehensive end-to-end [MrBiomics Recipe](https://github.com/epigen/MrBiomics?tab=readme-ov-file#-recipes) for [scCRISPR-seq Analysis](https://github.com/epigen/MrBiomics/wiki/scCRISPR%E2%80%90seq-Analysis-Recipe), including data, configuration, annotation and results.
 
 # 🔗 Links
 - [GitHub Repository](https://github.com/epigen/mixscape_seurat/)
