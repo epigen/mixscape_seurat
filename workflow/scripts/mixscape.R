@@ -22,7 +22,7 @@ variable_features_only <- snakemake@config[["variable_features_only"]]
 calcPerturbSig_params <- snakemake@config[["CalcPerturbSig"]]
 runMixscape_params <- snakemake@config[["RunMixscape"]]
 grna_split_symbol <- snakemake@config[["grna_split_symbol"]]
-npcs <- max(snakemake@config[["RunMixscape"]][["ndims"]], snakemake@config[["MixscapeLDA"]][["npcs"]])
+npcs <- max(snakemake@config[["CalcPerturbSig"]][["ndims"]], snakemake@config[["MixscapeLDA"]][["npcs"]])
 
 if (calcPerturbSig_params[["split_by_col"]]==''){
     perturbSig_split_by <- NULL
